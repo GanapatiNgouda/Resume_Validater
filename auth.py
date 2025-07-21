@@ -6,12 +6,15 @@ from typing import List, Optional
 import os
 from crud import get_user_by_username, get_user_roles
 from models import UserResponse
+from passlib.context import CryptContext
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "supersecretkey")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -56,3 +59,9 @@ def get_current_moderator_user(current_user: UserResponse = Depends(get_current_
     if "Moderator" not in current_user.roles:
         raise HTTPException(status_code=403, detail="Moderator privileges required")
     return current_user
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)

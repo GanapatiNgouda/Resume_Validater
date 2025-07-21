@@ -1,8 +1,8 @@
+from auth import get_password_hash
 from database import execute_non_query, execute_query
 from fastapi import HTTPException
 from typing import Optional, List
 from models import UserCreate
-from auth import get_password_hash, verify_password
 
 def create_user(user: UserCreate) -> int:
     hashed_password = get_password_hash(user.password)
@@ -73,6 +73,7 @@ def assign_role_to_user(user_id: int, role_name: str):
         raise
 
 def authenticate_user(username: str, password: str) -> Optional[dict]:
+    from auth import verify_password  # Moved import inside function
     user = get_user_by_username(username)
     if not user:
         return None
