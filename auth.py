@@ -4,7 +4,6 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import List, Optional
 import os
-from crud import get_user_by_username, get_user_roles
 from models import UserResponse
 from passlib.context import CryptContext
 
@@ -23,6 +22,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> UserResponse:
+    from crud import get_user_by_username, get_user_roles  # Moved import inside function
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

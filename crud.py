@@ -54,7 +54,7 @@ def get_user_roles(user_id: int) -> List[str]:
         JOIN Roles R ON UR.RoleId = R.RoleId
         WHERE UR.UserId = ?
     """
-    roles = execute_query(query, (user_id,), fetch_all=True)
+    roles = execute_query(query, (user_id,))
     return [r[0] for r in roles] if roles else []
 
 def assign_role_to_user(user_id: int, role_name: str):
