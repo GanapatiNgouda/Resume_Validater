@@ -4,3 +4,5 @@ pyodbc
 pydantic
 python-jose[cryptography]
 passlib[bcrypt]
+pypdf
+python-docx

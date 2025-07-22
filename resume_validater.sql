@@ -52,3 +52,23 @@ CREATE INDEX IX_Users_Username ON Users (Username);
 CREATE INDEX IX_Users_Email ON Users (Email);
 CREATE INDEX IX_UserRoles_UserId ON UserRoles (UserId);
 CREATE INDEX IX_UserRoles_RoleId ON UserRoles (RoleId);
+
+
+CREATE TABLE job_descriptions (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    job_title NVARCHAR(255) NOT NULL,
+    company_name NVARCHAR(255),
+    location NVARCHAR(255),
+    experience_required NVARCHAR(100),
+    qualifications NVARCHAR(MAX), -- Stored as JSON string of a list
+    responsibilities NVARCHAR(MAX), -- Stored as JSON string of a list
+    employment_type NVARCHAR(100),
+    primary_skills NVARCHAR(MAX), -- Stored as JSON string of a list
+    secondary_skills NVARCHAR(MAX), -- Stored as JSON string of a list
+    tertiary_skills NVARCHAR(MAX), -- Stored as JSON string of a list
+    jd_file_path NVARCHAR(500) NOT NULL, -- Path to the stored JD file
+    created_by int FOREIGN KEY REFERENCES users(userID), -- User or system that created the entry
+    created_at DATETIME DEFAULT GETDATE(), -- Timestamp of creation
+    updated_by int FOREIGN KEY REFERENCES users(userid) , -- User or system that last updated the entry
+    updated_at DATETIME DEFAULT GETDATE() -- Timestamp of last update
+);
